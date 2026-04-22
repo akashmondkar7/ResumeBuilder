@@ -1,4 +1,5 @@
 import React from 'react';
+import Title from './Title.jsx';
 
 const Features = () => {
     const [isHover, setIsHover] = React.useState(false);
@@ -7,11 +8,11 @@ const Features = () => {
     <div id='features'className='flex flex-col items-center my-10 scroll-mt-12'>
 
         <div className="flex items-center gap-2 text-sm text-green-600 bg-green-400/10  rounded-full px-6 py-1.5">
-          <Zap width={14}/>
+          {/* <Zap width={14}/> */}
             <span>Simple Process</span>
         </div>
-        <Titlle title=" "/>
-            <div className="flex flex-col md:flex-row items-center justify-center">
+        <Title title="Build your resume" description='Our streamlined proceess helps you create a professional resume in minutes with intelligent AI-powerd tools and fetures'/>
+            <div className="flex flex-col md:flex-row items-center xl:-mt-10">
                 <img className="max-w-2xl w-full xl:-ml-32" src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png" alt="" />
                 <div className="px-4 md:px-0" onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
                     <div className={"flex items-center justify-center gap-6 max-w-md group cursor-pointer"}>
