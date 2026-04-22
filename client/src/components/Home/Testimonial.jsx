@@ -1,13 +1,14 @@
 import React from 'react';
+import Title from './Title';
 
 const Testimonial = () => {
   return (
    <div id='testimonial'className='flex flex-col items-center my-10 scroll-mt-12'>
       <div className="flex items-center gap-2 text-sm text-green-600 bg-green-400/10  rounded-full px-6 py-1.5">
-          {/* <Zap width={14}/> */}
-            <span>Simple Process</span>
+          {/* <BookUserIconn width={14}/> */}
+            <span>Testimonials</span>
         </div>
-        <Title title="Build your resume" description='Our streamlined proceess helps you create a professional resume in minutes with intelligent AI-powerd tools and fetures'/>
+        <Title title="Don't just take our words" description="Hear what our user say about us. We're always looking for way to improve. If you have a positive experience with us, leave a review."/>
 
         
       
