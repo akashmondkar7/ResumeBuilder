@@ -235,3 +235,4 @@ export const dummyResumeData = [
         createdAt: "2025-09-25T15:26:49.652Z"
     }
 ]
+export default dummyResumeData;
