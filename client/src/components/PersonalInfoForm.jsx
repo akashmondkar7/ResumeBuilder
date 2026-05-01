@@ -1,9 +1,9 @@
-import {LucideLinkedin, Key, LucideBriefcase, LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser, LucideGlobe, LucideGitBranch } from 'lucide-react';
+import { Key, LucideBriefcase, LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser, LucideGlobe, LucideGitBranch, LucideInfo } from 'lucide-react';
 import React from 'react';
 
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
 
-    const handleImageChange = (field ,value) => {
+    const handleChange = (field ,value) => {
         onChange({...data,[field]:value})
 
     }
@@ -14,7 +14,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         {Key: "phone", label: "Phone Number", icon: LucidePhone, type: "tel"},
         {Key: "location", label: "Location", icon: LucideMapPin, type: "text"},
         {Key:"profession" , label: "Profession", icon:LucideBriefcaseBusiness, type: "text"},
-        {Key: "linkedin", label: "LinkedIn Profile", icon:LucideLinkedin, type: "url"},
+        {Key: "linkedin", label: "LinkedIn Profile", icon: LucideInfo, type: "url"},
         {key: "website", label: "Personal Website", icon: LucideGlobe, type: "url"},
         {key:"github", label: "Github Profile", icon: LucideGitBranch, type: "url"},
 
@@ -38,7 +38,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                 
                 )}
                 <input type="file" accept='image/jpeg, image/png' className='hidden'
-                onChange={(e)=> handleImageChange('image', e.target.files[0])} />
+                onChange={(e)=> handleChange('image', e.target.files[0])} />
             </label>
             {typeof data.image === "object" && (
                 <div className='flex flex-col gap-1 pl-4 text-sm'>
@@ -66,42 +66,11 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                     {field.label}
                     {field.required && <span className='text-red-500'>*</span>
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     }
                 </label>
+                <input type={field.type} value={data[field.key]||" "} 
+                onChange={(e)=>handleChange(field.key, e.target.value) } className='mt-1 w-full px-3 py-2 border border-grey-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm'
+                placeholder={`Enter your ${field.label.toLowerCase()}`} required={field.required}/>
 
                 </div>
             )
