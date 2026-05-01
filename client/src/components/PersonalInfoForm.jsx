@@ -1,4 +1,4 @@
-import { Key, LucideBriefcase, LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser, LucideGlobe, LucideGitBranch, LucideInfo } from 'lucide-react';
+import { Key, LucideBriefcase, LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser, LucideGlobe, LucideGitBranch, LucideInfo, LucideLink } from 'lucide-react';
 import React from 'react';
 
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
@@ -14,7 +14,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         {Key: "phone", label: "Phone Number", icon: LucidePhone, type: "tel"},
         {Key: "location", label: "Location", icon: LucideMapPin, type: "text"},
         {Key:"profession" , label: "Profession", icon:LucideBriefcaseBusiness, type: "text"},
-        {Key: "linkedin", label: "LinkedIn Profile", icon: LucideInfo, type: "url"},
+        {Key: "linkedin", label: "LinkedIn Profile", icon: LucideLink, type: "url"},
         {key: "website", label: "Personal Website", icon: LucideGlobe, type: "url"},
         {key:"github", label: "Github Profile", icon: LucideGitBranch, type: "url"},
 
