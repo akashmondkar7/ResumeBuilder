@@ -119,6 +119,12 @@ const ResumeBuilder = () => {
                 )
                }
 
+               {
+                activeSection.id === "education" && (
+                  <EducationForm data={resumeData.education} onChange={(data)=>setResumeData(prev => ({...prev,education:data}))}/>
+                )
+               }
+
 
              </div>
             
