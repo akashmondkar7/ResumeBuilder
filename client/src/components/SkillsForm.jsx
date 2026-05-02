@@ -83,7 +83,7 @@ const SkillsForm = ({ data, onChange }) => {
 
       <div className="bg-blue-50 p-3 rounded-lg">
         <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> Add 8–12 relevant skills. Include both technical
+          <strong>Tip:</strong> Add 8-12 relevant skills. Include both technical
           (programming, tools) and soft skills (leadership, communication).
         </p>
       </div>
