@@ -20,9 +20,9 @@ const ResumeBuilder = () => {
     title: " ",
     personal_info: {},
     professional_summary: " ",
-    work_experience: [],
+    experience: [],
     education: [],
-    projects: [],
+    project: [],
     skills: [],
     template:"classic",
     accent_color:"#3B82F6",
@@ -54,9 +54,9 @@ const ResumeBuilder = () => {
    const activeSection = sections[activeSectionIndex]
 
 
-  useEffect(() => {
+useEffect(() => {
   loadResumeData();
-}, []);
+}, [resumeId]);
 
    const changeResumeVisibility = async () => {
     setResumeData({...resumeData, public: !resumeData.public});
@@ -144,7 +144,7 @@ const ResumeBuilder = () => {
                }
                {
                 activeSection.id === "experience" && (
-                  <ExperienceForm data={resumeData.work_experience} onChange={(data)=>setResumeData(prev => ({...prev,experience:data}))}/>
+                  <ExperienceForm data={resumeData.experience} onChange={(data)=>setResumeData(prev => ({...prev,experience:data}))}/>
                 )
                }
 
@@ -155,8 +155,8 @@ const ResumeBuilder = () => {
                }
 
                {
-                activeSection.id === "projects" && (
-                  <ProjectForm data={resumeData.projects} onChange={(data)=>setResumeData(prev => ({...prev,project:data}))}/>
+                activeSection.id === "project" && (
+                  <ProjectForm data={resumeData.project} onChange={(data)=>setResumeData(prev => ({...prev,project:data}))}/>
                 )
                }
 
