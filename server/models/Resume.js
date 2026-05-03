@@ -35,6 +35,16 @@ const ResumeSchema = new mongoose.Schema({
       description: { type: String },
     }
   ],
+   education: [
+    {
+      company: { type: String },
+      position: { type: String },
+      start_date: { type: Date },
+      end_date: { type: Date },
+      description: { type: String },
+      is_current: { type: Boolean },
+    }
+  ],
 
-  
+
 });
