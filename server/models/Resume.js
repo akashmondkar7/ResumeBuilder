@@ -26,13 +26,15 @@ const ResumeSchema = new mongoose.Schema({
       end_date: { type: Date },
       description: { type: String },
       is_current: { type: Boolean },
-    },
+    }
   ],
   project: [
     {
       name: { type: String },
       type: { type: String },
       description: { type: String },
-    },
+    }
   ],
+
+  
 });
