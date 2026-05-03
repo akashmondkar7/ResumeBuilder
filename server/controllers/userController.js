@@ -109,4 +109,16 @@ export const getUserById = async (req, res) => {
     
    }
 }
+  //controller for getting user resumes
 
+  //GET: /api/user/resumes
+
+  export const getUserResumess = async (req,res) => {
+
+    try {
+        
+    } catch (error) {
+        
+    }
+    
+  }
