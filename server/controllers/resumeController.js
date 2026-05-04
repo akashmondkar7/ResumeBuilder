@@ -64,4 +64,7 @@ export const getResumeById = async (req, res) => {
 //get resume by id public 
 // GET: /api/resumes/public
 
+export const getResumeById = async (req, res) => {
+    
+}
 
