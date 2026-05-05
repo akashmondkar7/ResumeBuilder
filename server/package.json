@@ -5,14 +5,14 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    
     "start": "node server.js",
     "server": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
- "dependencies": {
+  "dependencies": {
+    "@imagekit/nodejs": "^7.5.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
