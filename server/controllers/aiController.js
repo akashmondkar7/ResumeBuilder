@@ -11,7 +11,7 @@ export const enhanceProfessionalSummary = async (req, res)=>{
         }
 
         await ai.chat.completions.create({
-              model: "gemini-3-flash-preview",
+              model: process.env.OPENAI_MODEL,
     messages: [
         {   role: "system",
             content: "You are a helpful assistant." 
