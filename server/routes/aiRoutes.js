@@ -12,3 +12,4 @@ aiRouter.post('/upload-resume',protect, updateResume)
 
 
 export default aiRouter;
+
