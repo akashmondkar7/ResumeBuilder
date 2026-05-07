@@ -11,3 +11,4 @@ aiRouter.post('/enhance-pro-desc',protect, enhanceJobDescription)
 aiRouter.post('/upload-resume',protect, updateResume)
 
 
+export default aiRouter;
