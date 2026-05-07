@@ -71,7 +71,45 @@ export const enhanceJobDescription = async (req, res)=>{
     }
 }
 
+// controller for uploading a resume to the database
+// POST: /api/ai/upload-resume
 
+export const uploadResume = async (req, res)=>{
+    try {
+        
+        const {resumeText,title} =req.body;
+
+        const userId = req.userId;
+
+        if(!resumeText){
+            return res.status(400).json({message: "Missing required fields"})
+        }
+
+
+
+      const response = await ai.chat.completions.create({
+              model: process.env.OPENAI_MODEL,
+    messages: [
+        {   role: "system",
+            content: ""
+        },
+        {
+            role: "user",
+            content: userContent,
+        },
+    ],
+        })
+
+        const ennhancedContent = response.choices[0].message.content;
+
+        return res.status(200).json({enhancedContent})
+
+    } catch (error) {
+
+         return res.status(400).json({massage: error.message})
+        
+    }
+}
 
 
 
