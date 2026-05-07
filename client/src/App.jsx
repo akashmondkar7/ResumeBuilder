@@ -1,27 +1,4 @@
-// import { Route, Routes } from "react-router-dom";
-// import "./App.css";
-// import Home from "./pages/Home";
-// import Dashboard from "./pages/Dashboard";
-// import Layout from "./pages/Layout";
-// import ResumeBuilder from "./pages/ResumeBuilder";
-// import Preview from "./pages/Preview";
-// import Login from "./pages/Login";
-// export default function App() {
-//   return (
-//     <>
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-        
-//         <Route path="/app" element={<Layout />} >
-//         <Route index element={<Dashboard />} />
-//         <Route path='builder/:resumeId' element={<ResumeBuilder />} />
-//         </Route>
-//         <Route path="/view/:resumeId" element={<Preview />} />
-//         <Route path="/login" element={<Login />} />
-//       </Routes>
-//     </>
-//   );
-// }
+
 import { Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
@@ -30,8 +7,30 @@ import Layout from "./pages/Layout";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import Preview from "./pages/Preview";
 import Login from "./pages/Login";
+import { useDispatch } from "react-redux";
 
 export default function App() {
+
+  const dispatch = useDispatch()
+
+  const getUserData = async() =>{
+    const token = localStorage.getItem('token')
+
+    try {
+      if(token){
+        const {data} = await
+      }
+      
+    } catch (error) {
+      
+    }
+
+
+  }
+
+
+
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -50,7 +49,6 @@ export default function App() {
       </Route>
 
       <Route path="/view/:resumeId" element={<Preview />} />
-      <Route path="/login" element={<Login />} />
 
       {/* optional fallback */}
       <Route path="*" element={<div>404 Page Not Found</div>} />
