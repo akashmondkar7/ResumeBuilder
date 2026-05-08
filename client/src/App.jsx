@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import api from "./configs/api";
 import { login, setLoading } from "./app/fetures/authSlice";
 import { useEffect } from "react";
+import {Toaster} from "react-hot-toast";
+
 
 export default function App() {
   const dispatch = useDispatch();
@@ -42,6 +44,8 @@ export default function App() {
   },[])
 
   return (
+    <>
+    <Toaster/>
     <Routes>
       <Route path="/" element={<Home />} />
 
@@ -57,5 +61,6 @@ export default function App() {
       {/* optional fallback */}
       <Route path="*" element={<div>404 Page Not Found</div>} />
     </Routes>
+    </>
   );
 }
