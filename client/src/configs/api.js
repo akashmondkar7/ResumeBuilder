@@ -1,9 +1,10 @@
-import axios from "axios"
+// d:\projects\AI MERN PROJECT\Rusme-Builder\client\src\configs\api.js
+import axios from "axios";
 
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
 const api = axios.create({
-VITE_BASE_URL ="http://localhost:3000"
-    baseURL :import.meta.env.VITE_BASE_URL
-    
-})
- export default api;
+  baseURL,
+});
+
+export default api;
