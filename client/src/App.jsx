@@ -8,6 +8,7 @@ import ResumeBuilder from "./pages/ResumeBuilder";
 import Preview from "./pages/Preview";
 import Login from "./pages/Login";
 import { useDispatch } from "react-redux";
+import api from "./configs/api";
 
 export default function App() {
 
@@ -18,7 +19,7 @@ export default function App() {
 
     try {
       if(token){
-        const {data} = await
+        const {data} = await api.get('/api/users/data',{})
       }
       
     } catch (error) {
