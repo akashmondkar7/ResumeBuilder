@@ -112,10 +112,10 @@ const ResumeBuilder = () => {
       </div>
 
       <div className="max-w-7xl mx-auto p-4 pb-8">
-        <div className="grid lg:grid-cols-12 gap-8">
+        <div className="grid items-start gap-6 xl:grid-cols-[minmax(360px,460px)_minmax(0,1fr)] lg:grid-cols-[minmax(340px,420px)_minmax(0,1fr)]">
           {/* left Panel - Form Fields */}
 
-          <div className="relative lg:col-span-5 rounded-lg overflow-hidden">
+          <div className="relative rounded-lg overflow-hidden lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
               {/* progress bar using activeSectionIndex */}
               <hr className="absolute top-0 left-0 right-0 border-2 border-gray-200" />
@@ -244,9 +244,8 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Right Panel - Preview */}
-          <div className="lg:col-span-7 max-lg:mt-6">
-            <div className="relative w-full">
-              <div className="absolute bottom-3 left-0 right-0 flex items-center justify-end gap-2">
+          <div className="min-w-0">
+            <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
                 {resumeData.public && (
                   <button
                     onClick={handleShare}
@@ -275,13 +274,15 @@ const ResumeBuilder = () => {
                   <LucideDownload className="size-4" />
                   Download
                 </button>
-              </div>
             </div>
-            <ResumePreview
-              data={resumeData}
-              template={resumeData.template}
-              accentColor={resumeData.accent_color}
-            />
+            <div className="overflow-x-auto rounded-lg bg-slate-100 px-3 py-6 sm:px-6">
+              <ResumePreview
+                data={resumeData}
+                template={resumeData.template}
+                accentColor={resumeData.accent_color}
+                classes="mx-auto min-h-[297mm] w-full max-w-[210mm] bg-white shadow-xl"
+              />
+            </div>
           </div>
         </div>
       </div>
