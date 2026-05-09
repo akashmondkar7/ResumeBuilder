@@ -51,9 +51,15 @@ const Dashboard = () => {
   }
 
 
+  // useEffect(() => {
+  //   loadAllResumes();
+  // }, []);
   useEffect(() => {
-    loadAllResumes();
-  }, []);
+  async function fetchData() {
+loadAllResumes() }
+
+  fetchData();
+}, []);
 
   return (
     <div>

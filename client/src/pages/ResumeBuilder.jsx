@@ -15,7 +15,7 @@ import SkillsForm from "../components/SkillsForm";
 
 const ResumeBuilder = () => {
   const {resumeId} = useParams();
-  const [resumeData, setResumeData] = React.useState({
+  const [resumeData, setResumeData] = useState({
     _id: " ",
     title: " ",
     personal_info: {},
@@ -100,7 +100,7 @@ useEffect(() => {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
               {/* progress bar using activeSectionIndex */}
               <hr  className="absolute top-0 left-0 right-0 border-2 border-gray-200"/>
-              <hr className="absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-green-600 border-none transition-all duration"
+              <hr className="absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-green-600 border-none transition-all duration-300"
               style={{width:`${activeSectionIndex * 100 / (sections.length - 1)}%`}}/>
 
               {/* Section Navigation */}
@@ -155,8 +155,8 @@ useEffect(() => {
                }
 
                {
-                activeSection.id === "project" && (
-                  <ProjectForm data={resumeData.project} onChange={(data)=>setResumeData(prev => ({...prev,project:data}))}/>
+                activeSection.id === "projects" && (
+                  <ProjectForm data={resumeData.projects} onChange={(data)=>setResumeData(prev => ({...prev,projects:data}))}/>
                 )
                }
 
