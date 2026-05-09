@@ -22,7 +22,7 @@ const ResumeBuilder = () => {
     professional_summary: " ",
     experience: [],
     education: [],
-    project: [],
+    projects: [],
     skills: [],
     template:"classic",
     accent_color:"#3B82F6",
