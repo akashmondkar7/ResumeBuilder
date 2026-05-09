@@ -7,8 +7,8 @@ import Resume from "../models/Resume.js"
 
 
 const generateToken = (id) => {
-    const token = jwt.sign({userId},process.env.JWT_SECRET,{expiresIn: '7d'})
-    return token;
+   const token = jwt.sign({ userId: id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+   return token;
 }
 //controller for user registration
 //post: /api/users/register
@@ -35,7 +35,7 @@ export const registerUser = async (req, res) => {
         const token = generateToken(newUser._id)
         newUser.password = undefined;
 
-        return res.status(201).json({message: "User created successfully",token,User:newUser})
+        return res.status(201).json({ message: "User created successfully", token, user: newUser })
 
 
 
@@ -56,28 +56,24 @@ export const LoginUser = async (req, res) => {
    try {
     const {email,password} = req.body;
      //check if user exist
-     if( !email || !password){
-         const user = await User.findOne({email})
-         if(!user){
-            return res.status(400).json({message: "Invalid user or password"})
-         }
-         
-        }
-        if(!user.comparePassword(password)){
-            return res.status(400).json({message: "Invalid user or password"})
+    if (!email || !password) {
+       return res.status(400).json({ message: "Missing email or password" })
+    }
 
-        }
+    const user = await User.findOne({ email })
+    if (!user) {
+       return res.status(400).json({ message: "Invalid user or password" })
+    }
 
-        //return sucess massage
-        // create new user
+    const isMatch = await user.comparePassword(password)
+    if (!isMatch) {
+       return res.status(400).json({ message: "Invalid user or password" })
+    }
 
-   
+    const token = generateToken(user._id)
+    user.password = undefined;
 
-        //return Sucess massage
-        const token = generateToken(user._id)
-        user.password = undefined;
-
-        return res.status(200).json({message: "login successfully",token,user})
+    return res.status(200).json({ message: "login successfully", token, user })
 
    } catch (error) {
 
