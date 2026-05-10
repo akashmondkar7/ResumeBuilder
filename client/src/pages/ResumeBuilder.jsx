@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import dummyResumeData from "../assets/assets";
 import {
   LucideChevronRight,
   LucideArrowLeft,
@@ -11,7 +10,6 @@ import {
   LucideGraduationCap,
   LucideSparkles,
   LucideUser,
-  LucideShare,
   LucideEye,
   LucideEyeOff,
   LucideDownload,
@@ -30,90 +28,114 @@ import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 
+const defaultResumeData = {
+  _id: "",
+  title: "",
+  personal_info: {},
+  professional_summary: "",
+  experience: [],
+  education: [],
+  projects: [],
+  skills: [],
+  template: "classic",
+  accent_color: "#3B82F6",
+  public: false,
+};
+
+const sections = [
+  { id: "personal_info", name: "Personal Information", icon: LucideUser },
+  { id: "summary", name: "Summary", icon: LucideFileText },
+  { id: "experience", name: "Experience", icon: LucideBriefcase },
+  { id: "education", name: "Education", icon: LucideGraduationCap },
+  { id: "projects", name: "Projects", icon: LucideFolder },
+  { id: "skills", name: "Skills", icon: LucideSparkles },
+];
+
+const getErrorMessage = (error, fallback = "Something went wrong") =>
+  error?.response?.data?.message || error?.message || fallback;
+
+const normalizeResumeData = (resume = {}) => ({
+  ...defaultResumeData,
+  ...resume,
+  personal_info: resume.personal_info || {},
+  professional_summary: resume.professional_summary || "",
+  experience: Array.isArray(resume.experience) ? resume.experience : [],
+  education: Array.isArray(resume.education) ? resume.education : [],
+  projects: Array.isArray(resume.projects) ? resume.projects : [],
+  skills: Array.isArray(resume.skills) ? resume.skills : [],
+  template: resume.template || defaultResumeData.template,
+  accent_color: resume.accent_color || defaultResumeData.accent_color,
+  public: Boolean(resume.public),
+});
+
 const ResumeBuilder = () => {
-
   const { resumeId } = useParams();
-  const {token} =useSelector(state => state.auth)
+  const { token } = useSelector((state) => state.auth);
 
-
-  const [resumeData, setResumeData] = useState({
-    _id: " ",
-    title: " ",
-    personal_info: {},
-    professional_summary: " ",
-    experience: [],
-    education: [],
-    projects: [],
-    skills: [],
-    template: "classic",
-    accent_color: "#3B82F6",
-    public: false,
-  });
-
-  const LoadExistingResume = async () => {
-    try {
-      const {data} = await api.get('/api/resumes/get/' + resumeId ,{
-        headers: {
-          Authorization: token
-        }
-      })
-      if(data.resume){
-        setResumeData(data.resume)
-        document.title = data.resume.title;
-      }
-    } catch (error) {
-      console.log(error.massage)
-    }
-  }
-
+  const [resumeData, setResumeData] = useState(defaultResumeData);
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
-
-  const sections = [
-    { id: "personal_info", name: "Personal Information", icon: LucideUser },
-    { id: "summary", name: "Summary", icon: LucideFileText },
-    { id: "experience", name: "Experience", icon: LucideBriefcase },
-    { id: "education", name: "Education", icon: LucideGraduationCap },
-    { id: "projects", name: "Projects", icon: LucideFolder },
-    { id: "skills", name: "Skills", icon: LucideSparkles },
-  ];
 
   const activeSection = sections[activeSectionIndex];
 
   useEffect(() => {
-    const fetchResume = async () => {
-      const resume = dummyResumeData.find((resume) => resume._id === resumeId);
+    if (!resumeId || !token) {
+      return;
+    }
 
-      if (resume) {
-        setResumeData(resume);
-        document.title = resume.title;
+    const controller = new AbortController();
+
+    const loadExistingResume = async () => {
+      try {
+        const { data } = await api.get("/api/resumes/get/" + resumeId, {
+          headers: {
+            Authorization: token,
+          },
+          signal: controller.signal,
+        });
+
+        if (data.resume) {
+          const normalizedResume = normalizeResumeData(data.resume);
+          setResumeData(normalizedResume);
+          document.title = normalizedResume.title || "Resume Builder";
+        }
+      } catch (error) {
+        if (error.name !== "CanceledError") {
+          toast.error(getErrorMessage(error, "Failed to load resume"));
+        }
       }
     };
 
-    fetchResume();
-  }, [resumeId]);
+    loadExistingResume();
+
+    return () => controller.abort();
+  }, [resumeId, token]);
 
   const changeResumeVisibility = async () => {
+    const nextPublicState = !resumeData.public;
+
     try {
-      const formData = new FormData()
-      formData.append('resumeID',resumeId)
-      formData.append('resumeData',JSON.stringify({public:! resumeData.public}))
+      const formData = new FormData();
+      formData.append("resumeId", resumeId);
+      formData.append("resumeData", JSON.stringify({ public: nextPublicState }));
 
-       const {data} = await api.put('/api/resumes/update',formData  ,{
+      const { data } = await api.put("/api/resumes/update", formData, {
         headers: {
-          Authorization: token
-        }
-      })
+          Authorization: token,
+        },
+      });
 
-      setResumeData({...resumeData,public:!resumeData.public})
-      toast.success(data.message)
-
-
-
+      setResumeData((prev) => ({
+        ...prev,
+        public: data.resume?.public ?? nextPublicState,
+      }));
+      toast.success(data.message || "Resume visibility updated");
     } catch (error) {
-      console.error("Error saving resume:",error)
+      console.error("Error updating resume visibility:", error);
+      toast.error(getErrorMessage(error, "Failed to update visibility"));
     }
   };
+
   const handleShare = () => {
     const frontendUrl = window.location.href.split("/app/builder")[0];
     const resumeUrl = frontendUrl + "/view/" + resumeId;
@@ -129,29 +151,46 @@ const ResumeBuilder = () => {
     window.print();
   };
 
-  const saveResume = async () => {
+  const saveResume = useCallback(async () => {
+    const updatedResumeData = {
+      ...resumeData,
+      personal_info: {
+        ...resumeData.personal_info,
+      },
+    };
+
+    if (typeof resumeData.personal_info.image === "object") {
+      delete updatedResumeData.personal_info.image;
+    }
+
+    const formData = new FormData();
+    formData.append("resumeId", resumeId);
+    formData.append("resumeData", JSON.stringify(updatedResumeData));
+
+    if (removeBackground) {
+      formData.append("removeBackground", "yes");
+    }
+
+    if (typeof resumeData.personal_info.image === "object") {
+      formData.append("image", resumeData.personal_info.image);
+    }
+
     try {
-      let UpdatedResumeData = structuredClone(resumeData)
-      //  remove image from updatedResumeData
-      if(typeof resumeData.personal_info.image ==='object'){
-        delete UpdatedResumeData.personal_info.image
+      const { data } = await api.put("/api/resumes/update", formData, {
+        headers: { Authorization: token },
+      });
+
+      if (data.resume) {
+        setResumeData(normalizeResumeData(data.resume));
+        setRemoveBackground(false);
       }
 
-      const formData = new FormData();
-      formData.append('resumeId',resumeId)
-      formData.append('resumeData',JSON.stringify(UpdatedResumeData))
-
-      removeBackground && formData.append('removeBackground',"yes")
-       typeof resumeData.personal_info.image ==='object' &&      
-
-
-
-
-
+      return data.message || "Resume saved successfully";
     } catch (error) {
-      
+      console.error("Error saving resume:", error);
+      throw new Error(getErrorMessage(error, "Failed to save resume"));
     }
-  }
+  }, [removeBackground, resumeData, resumeId, token]);
 
   return (
     <div>
@@ -166,11 +205,11 @@ const ResumeBuilder = () => {
       </div>
 
       <div className="max-w-7xl mx-auto p-4 pb-8">
-        <div className="grid items-start gap-6 xl:grid-cols-[minmax(360px,460px)_minmax(0,1fr)] lg:grid-cols-[minmax(340px,420px)_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(360px,460px)_minmax(0,1fr)] lg:grid-cols-[minmax(340px,420px)_minmax(0,1fr)]">
           {/* left Panel - Form Fields */}
 
-          <div className="relative rounded-lg overflow-hidden lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
+          <div className="relative min-w-0 rounded-lg overflow-hidden lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 pt-1 sm:p-6 sm:pt-1">
               {/* progress bar using activeSectionIndex */}
               <hr className="absolute top-0 left-0 right-0 border-2 border-gray-200" />
               <hr
@@ -182,7 +221,7 @@ const ResumeBuilder = () => {
 
               {/* Section Navigation */}
 
-              <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
+              <div className="flex flex-wrap justify-between items-center gap-2 mb-6 border-b border-gray-300 py-1">
                 <div className="flex items-center gap-2">
                   <TemplateSelector
                     selectedTemplate={resumeData.template}
@@ -291,7 +330,15 @@ const ResumeBuilder = () => {
                   />
                 )}
               </div>
-              <button className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
+              <button 
+              onClick={() =>
+                toast.promise(saveResume(), {
+                  loading: "Saving...",
+                  success: (message) => message,
+                  error: (error) => error.message,
+                })
+              }
+              className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
                 Save Changes
               </button>
             </div>
@@ -334,7 +381,7 @@ const ResumeBuilder = () => {
                 data={resumeData}
                 template={resumeData.template}
                 accentColor={resumeData.accent_color}
-                classes="mx-auto min-h-[297mm] w-full max-w-[210mm] bg-white shadow-xl"
+                classes="mx-auto min-h-[297mm] w-[210mm] max-w-full bg-white shadow-xl"
               />
             </div>
           </div>

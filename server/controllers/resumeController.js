@@ -36,7 +36,7 @@ export const deleteResume = async (req, res) => {
       return res.status(404).json({ message: "Resume not found" });
     }
 
-    //return success massage
+    //return success message
 
     return res.status(200).json({ message: "Resume deleted successfully" });
   } catch (error) {
@@ -57,7 +57,7 @@ export const getResumeById = async (req, res) => {
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
     }
-    //return success massage
+    //return success message
     resume.__v = undefined;
     resume.createdAt = undefined;
     resume.updatedAt = undefined;
@@ -94,7 +94,12 @@ export const updateResume = async (req, res) => {
     const { resumeId, resumeData, removeBackground } = req.body;
     const image = req.file;
 
-    let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
+    let resumeDataCopy;
+    if (typeof resumeData === "string") {
+      resumeDataCopy = JSON.parse(resumeData);
+    } else {
+      resumeDataCopy = JSON.parse(JSON.stringify(resumeData || {}));
+    }
 
     if (image) {
             

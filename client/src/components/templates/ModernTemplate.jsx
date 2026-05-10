@@ -1,4 +1,5 @@
-import { Mail, Phone, MapPin,  LucideLink,Globe } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { FaGithub, FaGlobe, FaLinkedin } from "react-icons/fa";
 
 const ModernTemplate = ({ data, accentColor }) => {
 	const formatDate = (dateStr) => {
@@ -39,14 +40,20 @@ const ModernTemplate = ({ data, accentColor }) => {
 					)}
 					{data.personal_info?.linkedin && (
 						<a target="_blank" href={data.personal_info?.linkedin} className="flex items-center gap-2">
-							<LucideLink className="size-4" />
+							<FaLinkedin className="size-4" />
 							<span className="break-all text-xs">{data.personal_info.linkedin.split("https://www.")[1] ? data.personal_info.linkedin.split("https://www.")[1] : data.personal_info.linkedin}</span>
 						</a>
 					)}
 					{data.personal_info?.website && (
 						<a target="_blank" href={data.personal_info?.website} className="flex items-center gap-2">
-							<Globe className="size-4" />
+							<FaGlobe className="size-4" />
 							<span className="break-all text-xs">{data.personal_info.website.split("https://")[1] ? data.personal_info.website.split("https://")[1] : data.personal_info.website}</span>
+						</a>
+					)}
+					{data.personal_info?.github && (
+						<a target="_blank" href={data.personal_info?.github} className="flex items-center gap-2">
+							<FaGithub className="size-4" />
+							<span className="break-all text-xs">{data.personal_info.github.split("https://")[1] ? data.personal_info.github.split("https://")[1] : data.personal_info.github}</span>
 						</a>
 					)}
 				</div>

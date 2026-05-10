@@ -1,4 +1,6 @@
 
+import { FaGithub, FaGlobe, FaLinkedin } from "react-icons/fa";
+
 const MinimalTemplate = ({ data, accentColor }) => {
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
@@ -22,10 +24,22 @@ const MinimalTemplate = ({ data, accentColor }) => {
                     {data.personal_info?.phone && <span>{data.personal_info.phone}</span>}
                     {data.personal_info?.location && <span>{data.personal_info.location}</span>}
                     {data.personal_info?.linkedin && (
-                        <span className="break-all">{data.personal_info.linkedin}</span>
+                        <span className="inline-flex items-center gap-1 break-all">
+                            <FaLinkedin className="size-4" />
+                            {data.personal_info.linkedin}
+                        </span>
                     )}
                     {data.personal_info?.website && (
-                        <span className="break-all">{data.personal_info.website}</span>
+                        <span className="inline-flex items-center gap-1 break-all">
+                            <FaGlobe className="size-4" />
+                            {data.personal_info.website}
+                        </span>
+                    )}
+                    {data.personal_info?.github && (
+                        <span className="inline-flex items-center gap-1 break-all">
+                            <FaGithub className="size-4" />
+                            {data.personal_info.github}
+                        </span>
                     )}
                 </div>
             </header>

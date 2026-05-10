@@ -1,5 +1,6 @@
-import { Key, LucideBriefcase, LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser, LucideGlobe, LucideGitBranch, LucideInfo, LucideLink } from 'lucide-react';
-import React from 'react';
+import { LucideBriefcaseBusiness, LucideMail, LucideMapPin, LucidePhone, LucideUser } from 'lucide-react';
+import React, { useEffect, useMemo } from 'react';
+import { FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa';
 
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
 
@@ -9,16 +10,32 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
     }
 
     const fields =[
-        {Key: "full_name", label: "Full Name", icon: LucideUser, type: "text, required: true"},
-        {Key: "email", label: "Email Address", icon: LucideMail, type: "email, required: true"},
-        {Key: "phone", label: "Phone Number", icon: LucidePhone, type: "tel"},
-        {Key: "location", label: "Location", icon: LucideMapPin, type: "text"},
-        {Key:"profession" , label: "Profession", icon:LucideBriefcaseBusiness, type: "text"},
-        {Key: "linkedin", label: "LinkedIn Profile", icon: LucideLink, type: "url"},
-        {key: "website", label: "Personal Website", icon: LucideGlobe, type: "url"},
-        {key:"github", label: "Github Profile", icon: LucideGitBranch, type: "url"},
+        {key: "full_name", label: "Full Name", icon: LucideUser, type: "text", required: true},
+        {key: "email", label: "Email Address", icon: LucideMail, type: "email", required: true},
+        {key: "phone", label: "Phone Number", icon: LucidePhone, type: "tel"},
+        {key: "location", label: "Location", icon: LucideMapPin, type: "text"},
+        {key:"profession" , label: "Profession", icon:LucideBriefcaseBusiness, type: "text"},
+        {key: "linkedin", label: "LinkedIn Profile", icon: FaLinkedin, type: "url"},
+        {key: "website", label: "Personal Website", icon: FaGlobe, type: "url"},
+        {key:"github", label: "Github Profile", icon: FaGithub, type: "url"},
 
     ]
+
+    const imagePreview = useMemo(() => {
+        if (!data.image || typeof data.image === "string") {
+            return data.image || "";
+        }
+
+        return URL.createObjectURL(data.image);
+    }, [data.image]);
+
+    useEffect(() => {
+        if (!imagePreview || typeof data.image === "string") {
+            return;
+        }
+
+        return () => URL.revokeObjectURL(imagePreview);
+    }, [data.image, imagePreview]);
 
 
   return (
@@ -28,7 +45,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         <div className='flex item-cente gap-2'>
             <label htmlFor="">
                 {data.image ? (
-                    <img src={typeof data.image === "string" ? data.image : URL.createObjectURL(data.image)} alt='user-image'
+                    <img src={imagePreview} alt='user-image'
                     className='w-16 h-16 rounded-full object-cover mt-5 ring ring-slate-300 hover:opacity-80'/>
                 ) :(
                     <div className='inline-flex items-center gap-2 mt-5 text-slate-600 hover:text-slate-700 cursor-pointer'>
@@ -38,7 +55,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                 
                 )}
                 <input type="file" accept='image/jpeg, image/png' className='hidden'
-                onChange={(e)=> handleChange('image', e.target.files[0])} />
+                onChange={(e)=> e.target.files?.[0] && handleChange('image', e.target.files[0])} />
             </label>
             {typeof data.image === "object" && (
                 <div className='flex flex-col gap-1 pl-4 text-sm'>
@@ -68,7 +85,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                     
                     }
                 </label>
-                <input type={field.type} value={data[field.key]||" "} 
+                <input type={field.type} value={data[field.key] || ""} 
                 onChange={(e)=>handleChange(field.key, e.target.value) } className='mt-1 w-full px-3 py-2 border border-grey-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm'
                 placeholder={`Enter your ${field.label.toLowerCase()}`} required={field.required}/>
 
