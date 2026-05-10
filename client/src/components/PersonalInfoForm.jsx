@@ -44,7 +44,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         <h3 className='text-lg font-semibold text-gray-900'>Personal Information</h3>
         <p className='text-sm text-gray-600'>Get Started with the personal information </p>
         <div className='flex items-center gap-2'>
-            <label htmlFor="">
+            <label htmlFor="profileImage">
                 {image ? (
                     <img src={imagePreview} alt='user-image'
                     className='w-16 h-16 rounded-full object-cover mt-5 ring ring-slate-300 hover:opacity-80'/>
@@ -55,7 +55,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                     </div>
                 
                 )}
-                <input type="file" accept='image/jpeg, image/png' className='hidden'
+                <input id='profileImage' type="file" accept='image/jpeg, image/png' className='hidden'
                 onChange={(e)=> e.target.files?.[0] && handleChange('image', e.target.files[0])} />
             </label>
             {typeof image === "object" && (
@@ -87,7 +87,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                     }
                 </label>
                 <input type={field.type} value={data?.[field.key] || ""} 
-                onChange={(e)=>handleChange(field.key, e.target.value) } className='mt-1 w-full px-3 py-2 border border-grey-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm'
+                onChange={(e)=>handleChange(field.key, e.target.value) } className='mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm'
                 placeholder={`Enter your ${field.label.toLowerCase()}`} required={field.required}/>
 
                 </div>
