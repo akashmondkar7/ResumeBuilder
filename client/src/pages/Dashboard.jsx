@@ -1,6 +1,5 @@
 import { FilePenLineIcon, LoaderCircleIcon, PencilIcon, PlusIcon, TrashIcon, UploadCloud, UploadCloudIcon, XIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { dummyResumeData } from '../assets/assets'
 import {useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import api from '../configs/api'
@@ -9,7 +8,7 @@ import pdfToText from 'react-pdftotext'
 
 const Dashboard = () => {
 
-  const {user, token} = useSelector(state => state.auth)
+  const { token} = useSelector(state => state.auth)
 
   const colors = ["#9333ea", "#d97706", "#dc2626", "#0284c7", "#16a34a"]
   const [allResumes, setAllResumes] = useState([])
@@ -23,14 +22,29 @@ const Dashboard = () => {
 
   const navigate = useNavigate()
 
-  const loadAllResumes = async () =>{
+  // const loadAllResumes = async () =>{
+  //   try {
+  //     const { data } = await api.get('/api/users/resumes', {headers: { Authorization: token }})
+  //     setAllResumes(data.resumes)
+  //   } catch (error) {
+  //     toast.error(error?.response?.data?.message || error.message)
+  //   }
+  // }
+useEffect(() => {
+  const fetchResumes = async () => {
     try {
-      const { data } = await api.get('/api/users/resumes', {headers: { Authorization: token }})
+      const { data } = await api.get('/api/users/resumes', {
+        headers: { Authorization: token }
+      })
+
       setAllResumes(data.resumes)
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message)
     }
   }
+
+  fetchResumes()
+}, [token])
 
   const createResume = async (event) => {
    try {
@@ -89,9 +103,7 @@ const Dashboard = () => {
      
   }
 
-  useEffect(()=>{
-    loadAllResumes()
-  },[])
+ 
 
   return (
     <div>

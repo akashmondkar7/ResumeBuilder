@@ -46,11 +46,26 @@ const ResumeBuilder = () => {
     public: false,
   });
 
-  const loadExistingResume = async () => {
+  // const loadExistingResume = async () => {
+  //   try {
+  //     const { data } = await api.get("/api/resumes/get/" + resumeId, {
+  //       headers: { Authorization: token },
+  //     });
+  //     if (data.resume) {
+  //       setResumeData(data.resume);
+  //       document.title = data.resume.title;
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
+  useEffect(() => {
+  const fetchResume = async () => {
     try {
       const { data } = await api.get("/api/resumes/get/" + resumeId, {
         headers: { Authorization: token },
       });
+
       if (data.resume) {
         setResumeData(data.resume);
         document.title = data.resume.title;
@@ -59,6 +74,9 @@ const ResumeBuilder = () => {
       console.log(error.message);
     }
   };
+
+  fetchResume();
+}, [resumeId, token]);
 
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
@@ -74,9 +92,9 @@ const ResumeBuilder = () => {
 
   const activeSection = sections[activeSectionIndex];
 
-  useEffect(() => {
-    loadExistingResume();
-  }, []);
+  // useEffect(() => {
+  //   loadExistingResume();
+  // }, []);
 
   const changeResumeVisibility = async () => {
     try {
