@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import { FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa';
 
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
+    const image = data?.image;
 
     const handleChange = (field ,value) => {
         onChange({...data,[field]:value})
@@ -22,20 +23,20 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
     ]
 
     const imagePreview = useMemo(() => {
-        if (!data.image || typeof data.image === "string") {
-            return data.image || "";
+        if (!image || typeof image === "string") {
+            return image || "";
         }
 
-        return URL.createObjectURL(data.image);
-    }, [data.image]);
+        return URL.createObjectURL(image);
+    }, [image]);
 
     useEffect(() => {
-        if (!imagePreview || typeof data.image === "string") {
+        if (!imagePreview || typeof image === "string") {
             return;
         }
 
         return () => URL.revokeObjectURL(imagePreview);
-    }, [data.image, imagePreview]);
+    }, [image, imagePreview]);
 
 
   return (
@@ -44,7 +45,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         <p className='text-sm text-gray-600'>Get Started with the personal information </p>
         <div className='flex items-center gap-2'>
             <label htmlFor="">
-                {data.image ? (
+                {image ? (
                     <img src={imagePreview} alt='user-image'
                     className='w-16 h-16 rounded-full object-cover mt-5 ring ring-slate-300 hover:opacity-80'/>
                 ) :(
@@ -57,7 +58,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                 <input type="file" accept='image/jpeg, image/png' className='hidden'
                 onChange={(e)=> e.target.files?.[0] && handleChange('image', e.target.files[0])} />
             </label>
-            {typeof data.image === "object" && (
+            {typeof image === "object" && (
                 <div className='flex flex-col gap-1 pl-4 text-sm'>
                     <p> Remove background</p>
                     <label className='relative inline-flex items-center cursor-pointer text-gray-900 gap-3'>
@@ -85,7 +86,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
                     
                     }
                 </label>
-                <input type={field.type} value={data[field.key] || ""} 
+                <input type={field.type} value={data?.[field.key] || ""} 
                 onChange={(e)=>handleChange(field.key, e.target.value) } className='mt-1 w-full px-3 py-2 border border-grey-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-sm'
                 placeholder={`Enter your ${field.label.toLowerCase()}`} required={field.required}/>
 
