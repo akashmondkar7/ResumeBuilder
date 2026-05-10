@@ -89,10 +89,13 @@ export const getPublicResumeById = async (req, res) => {
 // PUT: /api/resumes/update
 
 export const updateResume = async (req, res) => {
+  let imagePath;
+
   try {
     const userId = req.userId;
     const { resumeId, resumeData, removeBackground } = req.body;
     const image = req.file;
+    imagePath = image?.path;
 
     let resumeDataCopy;
     if (typeof resumeData === "string") {
@@ -101,22 +104,22 @@ export const updateResume = async (req, res) => {
       resumeDataCopy = JSON.parse(JSON.stringify(resumeData || {}));
     }
 
-    if (image) {
-            
-        const imageBufferData =fs.createReadStream(image.path)
-        
+    resumeDataCopy.personal_info = resumeDataCopy.personal_info || {};
 
+    if (image) {
+      const imageBufferData = fs.createReadStream(image.path);
+      const fileName = image.originalname || "resume.png";
+      const transformation = "w-300,h-300,fo-face,z-0.75" + (removeBackground ? ",e-bgremove" : "");
 
       const response = await imagekit.files.upload({
         file: imageBufferData,
-        fileName: "resume.png",
-        folder:"user-resumes",
-        transformation:{
-            pre:'w-300,h-300,fo-face,z-0.75'+ (removeBackground ?', e-bgremove' :'')
-        }
+        fileName,
+        folder: "user-resumes",
+        transformation: {
+          pre: transformation,
+        },
       });
-       resumeDataCopy.personal_info.image = response.url;
-      
+      resumeDataCopy.personal_info.image = response.url;
     }
 
     const resume = await Resume.findOneAndUpdate(
@@ -134,5 +137,9 @@ export const updateResume = async (req, res) => {
       .json({ message: "Resume updated successfully", resume });
   } catch (error) {
     return res.status(400).json({ message: error.message });
+  } finally {
+    if (imagePath) {
+      fs.unlink(imagePath, () => {});
+    }
   }
 };
