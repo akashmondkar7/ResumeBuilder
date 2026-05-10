@@ -1,6 +1,5 @@
 // controller for enhancing a resume's professional summary
 
-import { response } from "express";
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
 
@@ -147,9 +146,9 @@ export const uploadResume = async (req, res) => {
 
     const parsedData = JSON.parse(extractedData);
 
-    newResume = await Resume.create({ userId, titlle, ...parsedData });
+    const newResume = await Resume.create({ userId, title, ...parsedData });
 
-    res.json({ resumeId: newResume._id });
+    res.json({ resume: newResume, resumeId: newResume._id });
   } catch (error) {
     return res.status(400).json({ massage: error.message });
   }
