@@ -26,9 +26,16 @@ import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
 import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm";
 import SkillsForm from "../components/SkillsForm";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const ResumeBuilder = () => {
+
   const { resumeId } = useParams();
+  const {token} =useSelector(state => state.auth)
+
+
   const [resumeData, setResumeData] = useState({
     _id: " ",
     title: " ",
@@ -43,13 +50,21 @@ const ResumeBuilder = () => {
     public: false,
   });
 
-  // const loadResumeData = async () => {
-  //   const resume = dummyResumeData.find((resume) => resume._id === resumeId);
-  //   if (resume) {
-  //     setResumeData(resume);
-  //     document.title = resume.title;
-  //   }
-  // };
+  const LoadExistingResume = async () => {
+    try {
+      const {data} = await api.get('/api/resumes/get/' + resumeId ,{
+        headers: {
+          Authorization: token
+        }
+      })
+      if(data.resume){
+        setResumeData(data.resume)
+        document.title = data.resume.title;
+      }
+    } catch (error) {
+      console.log(error.massage)
+    }
+  }
 
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
@@ -79,10 +94,25 @@ const ResumeBuilder = () => {
   }, [resumeId]);
 
   const changeResumeVisibility = async () => {
-    setResumeData((prev) => ({
-      ...prev,
-      public: !prev.public,
-    }));
+    try {
+      const formData = new FormData()
+      formData.append('resumeID',resumeId)
+      formData.append('resumeData',JSON.stringify({public:! resumeData.public}))
+
+       const {data} = await api.put('/api/resumes/update',formData  ,{
+        headers: {
+          Authorization: token
+        }
+      })
+
+      setResumeData({...resumeData,public:!resumeData.public})
+      toast.success(data.message)
+
+
+
+    } catch (error) {
+      console.error("Error saving resume:",error)
+    }
   };
   const handleShare = () => {
     const frontendUrl = window.location.href.split("/app/builder")[0];
@@ -98,6 +128,30 @@ const ResumeBuilder = () => {
   const downloadResume = () => {
     window.print();
   };
+
+  const saveResume = async () => {
+    try {
+      let UpdatedResumeData = structuredClone(resumeData)
+      //  remove image from updatedResumeData
+      if(typeof resumeData.personal_info.image ==='object'){
+        delete UpdatedResumeData.personal_info.image
+      }
+
+      const formData = new FormData();
+      formData.append('resumeId',resumeId)
+      formData.append('resumeData',JSON.stringify(UpdatedResumeData))
+
+      removeBackground && formData.append('removeBackground',"yes")
+       typeof resumeData.personal_info.image ==='object' &&      
+
+
+
+
+
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <div>
