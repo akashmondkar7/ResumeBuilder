@@ -27,11 +27,14 @@ export const enhanceProfessionalSummary = async (req, res) => {
       ],
     });
 
-    const ennhancedContent = response.choices[0].message.content;
+    const enhancedContent = response.choices[0].message.content;
 
     return res.status(200).json({ enhancedContent });
   } catch (error) {
-    return res.status(400).json({ massage: error.message });
+    console.log(error);
+    console.log(error.message);
+    console.log(error.response?.data);
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -61,11 +64,14 @@ export const enhanceJobDescription = async (req, res) => {
       ],
     });
 
-    const ennhancedContent = response.choices[0].message.content;
+    const enhancedContent = response.choices[0].message.content;
 
     return res.status(200).json({ enhancedContent });
   } catch (error) {
-    return res.status(400).json({ massage: error.message });
+    console.log(error);
+    console.log(error.message);
+    console.log(error.response?.data);
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -150,6 +156,9 @@ export const uploadResume = async (req, res) => {
 
     res.json({ resume: newResume, resumeId: newResume._id });
   } catch (error) {
-    return res.status(400).json({ massage: error.message });
+    console.log(error);
+    console.log(error.message);
+    console.log(error.response?.data);
+    return res.status(400).json({ message: error.message });
   }
 };

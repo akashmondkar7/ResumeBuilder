@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import api from '../configs/api'
 import toast from 'react-hot-toast'
 
-const ProfessionalSummaryForm = ({data, onChange, setResumeData}) => {
+const ProfessionalSummaryForm = ({data, onChange}) => {
 
   const { token } = useSelector(state => state.auth)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -14,7 +14,7 @@ const ProfessionalSummaryForm = ({data, onChange, setResumeData}) => {
       setIsGenerating(true)
       const prompt = `enhance my professional summary "${data}"`;
       const response = await api.post('/api/ai/enhance-pro-sum', {userContent: prompt}, {headers: { Authorization: token }})
-      setResumeData(prev => ({...prev, professional_summary: response.data.enhancedContent}))
+      onChange(response.data.enhancedContent)
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message)
     }

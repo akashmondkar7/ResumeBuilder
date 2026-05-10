@@ -39,26 +39,26 @@ const ResumeBuilder = () => {
     professional_summary: "",
     experience: [],
     education: [],
-    project: [],
+    projects: [],
     skills: [],
     template: "classic",
     accent_color: "#3B82F6",
     public: false,
   });
 
-  // const loadExistingResume = async () => {
-  //   try {
-  //     const { data } = await api.get("/api/resumes/get/" + resumeId, {
-  //       headers: { Authorization: token },
-  //     });
-  //     if (data.resume) {
-  //       setResumeData(data.resume);
-  //       document.title = data.resume.title;
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
+  const normalizeResumeData = (resume) => ({
+    ...resume,
+    personal_info:
+      resume.personal_info ||
+      resume.persnoal_info ||
+      {},
+    projects:
+      resume.projects ||
+      resume.project ||
+      [],
+  });
+
+  
   useEffect(() => {
   const fetchResume = async () => {
     try {
@@ -67,7 +67,7 @@ const ResumeBuilder = () => {
       });
 
       if (data.resume) {
-        setResumeData(data.resume);
+        setResumeData(normalizeResumeData(data.resume));
         document.title = data.resume.title;
       }
     } catch (error) {
@@ -134,10 +134,13 @@ const ResumeBuilder = () => {
   const saveResume = async () => {
     try {
       let updatedResumeData = structuredClone(resumeData);
+      updatedResumeData.persnoal_info = updatedResumeData.personal_info;
+      updatedResumeData.project = updatedResumeData.projects;
 
       // remove image from updatedResumeData
       if (typeof resumeData.personal_info?.image === "object") {
         delete updatedResumeData.personal_info?.image;
+        delete updatedResumeData.persnoal_info?.image;
       }
 
       const formData = new FormData();
@@ -151,7 +154,7 @@ const ResumeBuilder = () => {
         headers: { Authorization: token },
       });
 
-      setResumeData(data.resume);
+      setResumeData(normalizeResumeData(data.resume));
       toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
@@ -276,9 +279,9 @@ const ResumeBuilder = () => {
                 )}
                 {activeSection.id === "projects" && (
                   <ProjectForm
-                    data={resumeData.project}
+                    data={resumeData.projects}
                     onChange={(data) =>
-                      setResumeData((prev) => ({ ...prev, project: data }))
+                      setResumeData((prev) => ({ ...prev, projects: data }))
                     }
                   />
                 )}

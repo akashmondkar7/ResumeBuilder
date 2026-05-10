@@ -11,11 +11,23 @@ const Preview = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [resumeData, setResumeData] = useState(null)
 
+  const normalizeResumeData = (resume) => ({
+    ...resume,
+    personal_info:
+      resume.personal_info ||
+      resume.persnoal_info ||
+      {},
+    projects:
+      resume.projects ||
+      resume.project ||
+      [],
+  })
+
   useEffect(() => {
   const fetchResume = async () => {
     try {
       const { data } = await api.get('/api/resumes/public/' + resumeId)
-      setResumeData(data.resume)
+      setResumeData(normalizeResumeData(data.resume))
     } catch (error) {
       console.log(error.message)
     } finally {
