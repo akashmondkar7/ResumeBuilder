@@ -39,10 +39,9 @@ export default function App() {
     }
   };
 
-  useEffect(()=>{
-    getUserData();
-  },)
-
+  useEffect(() => {
+   getUserData();
+}, []);
   return (
     <>
     <Toaster/>
