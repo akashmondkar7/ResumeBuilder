@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const ResumeSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectID, ref: "User" },
-  title: { type: String, defualt: "Untitled Resume" },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  title: { type: String, default: "Untitled Resume" },
   public: { type: Boolean, default: false },
-  template: { type: String, defualt: "classic" },
+  template: { type: String, default: "classic" },
   accent_color: { type: String, default: "#3B82F6" },
   professional_summary: { type: String, default: "" },
-  skills: [{ type: String, default: "" }],
-  persnoal_info: {
+  skills: [{ type: String }],
+  personal_info: {
     image: { type: String, default: "" },
     full_name: { type: String, default: "" },
     email: { type: String, default: "" },
@@ -26,30 +26,26 @@ const ResumeSchema = new mongoose.Schema({
       end_date: { type: Date },
       description: { type: String },
       is_current: { type: Boolean },
-    }
+    },
   ],
-  project: [
+  projects: [
     {
       name: { type: String },
       type: { type: String },
       description: { type: String },
-    }
+    },
   ],
-   education: [
+  education: [
     {
       institution: { type: String },
-    degree: { type: String },
-      field: { type:String },
+      degree: { type: String },
+      field: { type: String },
       graduation_date: { type: Date },
       gpa: { type: String },
-    }
+    },
   ],
+}, { timestamps: true, minimize: false });
 
-
-},{timestamps:true,minimize:false});
-
-
-
-const Resume = mongoose.model("Resume",ResumeSchema)
+const Resume = mongoose.model("Resume", ResumeSchema);
 
 export default Resume;
