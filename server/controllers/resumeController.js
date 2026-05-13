@@ -115,11 +115,8 @@ export const updateResume = async (req, res) => {
 
     // FIXED: use findOneAndUpdate (not findByIdAndUpdate) so the userId
     // ownership check is actually applied, preventing cross-user overwrites.
-    const resume = await Resume.findOneAndUpdate(
-      { userId, _id: resumeId },
-      resumeDataCopy,
-      { new: true },
-    );
+   Resume.findOneAndUpdate({ userId, _id: resumeId }, { $set: resumeDataCopy }, { new: true })
+
 
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
