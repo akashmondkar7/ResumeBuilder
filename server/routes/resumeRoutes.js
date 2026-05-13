@@ -6,7 +6,7 @@ import { createResume, deleteResume, getPublicResumeById, getResumeById, updateR
 const resumeRouter = express.Router();
 
 resumeRouter.post('/create',protect,createResume);
-resumeRouter.put('/update',upload.single('image'), protect,updateResume);
+resumeRouter.put('/update',protect,upload.single('image'), protect,updateResume);
 resumeRouter.delete('/delete/:resumeId',protect,deleteResume);
 resumeRouter.get('/get/:resumeId',protect,getResumeById);
 resumeRouter.get('/public/:resumeId',getPublicResumeById);
