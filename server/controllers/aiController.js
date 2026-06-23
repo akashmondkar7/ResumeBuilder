@@ -126,6 +126,7 @@ export const uploadResume = async (req, res) => {
 Resume text:
 ${resumeText}`;
 
+
     const response = await ai.chat.completions.create({
       model: process.env.OPENAI_MODEL,
       messages: [
