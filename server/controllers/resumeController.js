@@ -118,6 +118,8 @@ export const updateResume = async (req, res) => {
    Resume.findOneAndUpdate({ userId, _id: resumeId }, { $set: resumeDataCopy }, { new: true })
 
 
+   
+
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
     }
