@@ -113,6 +113,7 @@ const ResumeBuilder = () => {
       toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
+      throw error;
     }
   };
 
@@ -134,13 +135,12 @@ const ResumeBuilder = () => {
   const saveResume = async () => {
     try {
       let updatedResumeData = structuredClone(resumeData);
-      updatedResumeData.persnoal_info = updatedResumeData.personal_info;
-      updatedResumeData.project = updatedResumeData.projects;
+      delete updatedResumeData.persnoal_info;
+      delete updatedResumeData.project;
 
       // remove image from updatedResumeData
       if (typeof resumeData.personal_info?.image === "object") {
         delete updatedResumeData.personal_info?.image;
-        delete updatedResumeData.persnoal_info?.image;
       }
 
       const formData = new FormData();
@@ -154,7 +154,7 @@ const ResumeBuilder = () => {
         headers: { Authorization: token },
       });
 
-      setResumeData(data.resume)
+      setResumeData(normalizeResumeData(data.resume))
       toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);

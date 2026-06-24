@@ -92,6 +92,7 @@ export const updateResume = async (req, res) => {
     }
 
     if (image) {
+      resumeDataCopy.personal_info ||= {};
       const imageBufferData = fs.createReadStream(image.path);
 
       const response = await imagekit.upload({
@@ -100,7 +101,7 @@ export const updateResume = async (req, res) => {
         folder: "user-resumes",
         transformation: {
           pre:
-            "w-300,h-300,fo-face,z-0.75" +
+            "w-300,h-300,c-maintain_ratio,fo-face,z-0.75" +
             (removeBackground ? ",e-bgremove" : ""),
         },
       });
@@ -113,12 +114,11 @@ export const updateResume = async (req, res) => {
       });
     }
 
-    // FIXED: use findOneAndUpdate (not findByIdAndUpdate) so the userId
-    // ownership check is actually applied, preventing cross-user overwrites.
-   Resume.findOneAndUpdate({ userId, _id: resumeId }, { $set: resumeDataCopy }, { new: true })
-
-
-   
+    const resume = await Resume.findOneAndUpdate(
+      { userId, _id: resumeId },
+      { $set: resumeDataCopy },
+      { new: true, runValidators: true },
+    ).lean();
 
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });

@@ -1,6 +1,17 @@
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
 
+const getAiErrorMessage = (error) =>
+  error?.error?.message ||
+  error?.response?.data?.error?.message ||
+  error?.message ||
+  "AI request failed";
+
+const getAiStatus = (error) => {
+  const status = error?.status || error?.response?.status;
+  return Number.isInteger(status) && status >= 400 && status < 500 ? status : 502;
+};
+
 // POST: /api/ai/enhance-pro-sum
 export const enhanceProfessionalSummary = async (req, res) => {
   try {
@@ -28,8 +39,9 @@ export const enhanceProfessionalSummary = async (req, res) => {
     const enhancedContent = response.choices[0].message.content;
     return res.status(200).json({ enhancedContent });
   } catch (error) {
-    console.error("enhanceProfessionalSummary error:", error.message);
-    return res.status(400).json({ message: error.message });
+    const message = getAiErrorMessage(error);
+    console.error("enhanceProfessionalSummary error:", message);
+    return res.status(getAiStatus(error)).json({ message });
   }
 };
 
@@ -60,8 +72,9 @@ export const enhanceJobDescription = async (req, res) => {
     const enhancedContent = response.choices[0].message.content;
     return res.status(200).json({ enhancedContent });
   } catch (error) {
-    console.error("enhanceJobDescription error:", error.message);
-    return res.status(400).json({ message: error.message });
+    const message = getAiErrorMessage(error);
+    console.error("enhanceJobDescription error:", message);
+    return res.status(getAiStatus(error)).json({ message });
   }
 };
 
@@ -143,7 +156,8 @@ ${resumeText}`;
 
     return res.status(201).json({ resume: newResume, resumeId: newResume._id });
   } catch (error) {
-    console.error("uploadResume error:", error.message);
-    return res.status(400).json({ message: error.message });
+    const message = getAiErrorMessage(error);
+    console.error("uploadResume error:", message);
+    return res.status(getAiStatus(error)).json({ message });
   }
 };
