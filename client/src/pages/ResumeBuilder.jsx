@@ -113,7 +113,6 @@ const ResumeBuilder = () => {
       toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
-      throw error;
     }
   };
 
@@ -158,6 +157,7 @@ const ResumeBuilder = () => {
       toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
+      throw error;
     }
   };
 
