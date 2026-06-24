@@ -7,3 +7,4 @@ const ai = new OpenAI({
 
 export default ai;
 
+  
