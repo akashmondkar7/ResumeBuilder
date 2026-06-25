@@ -10,6 +10,9 @@ const TemplateSelector = ( {selectedTemplate, onChange}) => {
         {id: "minimal-image", name: "Minimal with image", preview:"A minimal design that incorporates a professional photo"},
         {id: "executive", name: "Executive", preview:"A refined, ATS-friendly layout with a compact sidebar and strong hierarchy"},
         {id: "portfolio", name: "Portfolio", preview:"A visual two-column template for creative and product-focused resumes"},
+        {id: "it-student", name: "IT Student", preview:"Project-first layout for CS/IT students, internships, and fresher roles"},
+        {id: "developer-fresher", name: "Developer Fresher", preview:"Dark header developer resume that highlights tech stack, GitHub, and builds"},
+        {id: "campus-tech", name: "Campus Tech", preview:"Campus placement design focused on education, skills, projects, and certificates"},
     ]
 
 
@@ -22,7 +25,7 @@ const TemplateSelector = ( {selectedTemplate, onChange}) => {
             <LucideLayout size={14}/> <span className='max-sm:hidden'>Template</span>
         </button>
         {isOpen && (
-            <div className='absolute top-full w-xs p-3 mt-2 space-y-3 z-10 bg-white rounded-md border border-gray-200 shadow-sm'>
+            <div className='absolute top-full w-80 max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto p-3 mt-2 space-y-3 z-10 bg-white rounded-md border border-gray-200 shadow-sm'>
                 {templates.map((template) =>(
                     <div key={template.id} onClick={()=> {onChange(template.id);setIsOpen(false)}}
                     className={`relative p-3 rounded-md cursor-pointer transition-all ${selectedTemplate === template.id ?
