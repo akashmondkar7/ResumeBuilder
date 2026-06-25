@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeftIcon,
   Briefcase,
+  Award,
   ChevronLeft,
   ChevronRight,
   DownloadIcon,
@@ -24,6 +25,7 @@ import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
 import SkillsForm from "../components/SkillsForm";
+import CertificationForm from "../components/CertificationForm";
 import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
@@ -40,6 +42,7 @@ const ResumeBuilder = () => {
     experience: [],
     education: [],
     projects: [],
+    certifications: [],
     skills: [],
     template: "classic",
     accent_color: "#3B82F6",
@@ -55,6 +58,10 @@ const ResumeBuilder = () => {
     projects:
       resume.projects ||
       resume.project ||
+      [],
+    certifications:
+      resume.certifications ||
+      resume.certificates ||
       [],
   });
 
@@ -87,6 +94,7 @@ const ResumeBuilder = () => {
     { id: "experience", name: "Experience", icon: Briefcase },
     { id: "education", name: "Education", icon: GraduationCap },
     { id: "projects", name: "Projects", icon: FolderIcon },
+    { id: "certifications", name: "Certificates", icon: Award },
     { id: "skills", name: "Skills", icon: Sparkles },
   ];
 
@@ -290,6 +298,14 @@ const ResumeBuilder = () => {
                     data={resumeData.skills}
                     onChange={(data) =>
                       setResumeData((prev) => ({ ...prev, skills: data }))
+                    }
+                  />
+                )}
+                {activeSection.id === "certifications" && (
+                  <CertificationForm
+                    data={resumeData.certifications}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({ ...prev, certifications: data }))
                     }
                   />
                 )}

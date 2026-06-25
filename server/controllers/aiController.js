@@ -125,6 +125,14 @@ export const uploadResume = async (req, res) => {
       "description": ""
     }
   ],
+  "certifications": [
+    {
+      "name": "",
+      "issuer": "",
+      "issue_date": "",
+      "credential_url": ""
+    }
+  ],
   "education": [
     {
       "institution": "",
