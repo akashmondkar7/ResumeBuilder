@@ -8,6 +8,8 @@ const TemplateSelector = ( {selectedTemplate, onChange}) => {
         {id: "modern", name: "Modern" , preview:"A contemporary design with bold headings, icons, and a two-column layout"},
         {id: "minimal", name: "Minimal", preview:"A simple, clean design with a focus on content and readability"},
         {id: "minimal-image", name: "Minimal with image", preview:"A minimal design that incorporates a professional photo"},
+        {id: "executive", name: "Executive", preview:"A refined, ATS-friendly layout with a compact sidebar and strong hierarchy"},
+        {id: "portfolio", name: "Portfolio", preview:"A visual two-column template for creative and product-focused resumes"},
     ]
 
 
